@@ -73,7 +73,7 @@ Type a command in the Find box starting with `!`, then Enter.
 |---|---|
 | `!hotkey [combo]` | Show or change the global hotkey (default `Ctrl+Alt+F`). Modifiers `Ctrl` `Alt` `Shift` `Win`; keys `A–Z` `0–9` `F1–F12` `Space` `Tab` `Escape` `Enter`. Remembered between runs. |
 | `!quit` | Stop the background searcher. |
-| `!help` | Open these docs in Notepad. |
+| `!help` | Open this README (on GitHub) in your browser. |
 
 ## Notes
 

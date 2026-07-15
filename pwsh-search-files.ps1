@@ -187,83 +187,6 @@ public class SearchForm : Form {
         [System.Windows.Forms.MessageBox]::Show($form, $msg, 'Search Files', 'OK', $icon) | Out-Null
     }
 
-    # HELP-TEXT-START  (hand-authored; this project has no gen_help.py yet -- keep
-    # in sync with README.md by hand if you edit either.)
-    $helpText = @'
-==============================
- Search-Files
-==============================
-
-A GUI file finder for Windows. Hit the global hotkey (Ctrl+Alt+F) and a window
-pops up with a Find box and a results pane. It searches the folder of the
-Explorer window you were just on -- type a pattern, press Enter, and matching
-files stream into the pane as they are found.
-
-It matches against the FULL PATH (folder names count, not just file names), the
-same as the console tool pwsh-find-files. A single paste-in PowerShell 7 script
-(no install). Sibling of pwsh-switch-window and pwsh-launch.
-
-THE ROOT FOLDER
-------------------------------
-
-On summon it captures the frontmost Explorer window (the one you were looking at
-before the hotkey) and puts its folder in the Root box. If you weren't on an
-Explorer window, Root falls back to S:\ (or your profile folder if S:\ isn't
-mapped). Root is editable -- type or paste any path to search somewhere else.
-
-USING IT
-------------------------------
-
-  - Ctrl+Alt+F -- summon (captures the current Explorer folder into Root)
-  - Type a pattern in Find, Enter -- search Root for it, newest results first
-  - Up / Down -- move through results (Down from Find jumps into the list)
-  - Enter / double-click a result -- open the file with its default app
-  - Ctrl+C -- copy selected results (or all, if none selected) as time<tab>path
-  - F5 -- re-run the last search
-  - Esc -- hide the window (stays loaded; re-summon with the hotkey)
-
-The pattern is auto-wrapped in *...*, case-insensitive -- so "etv" matches any
-path containing "etv". Include your own inner * for ordered tokens: "etv*xls"
-matches "etv" then "xls" later in the path.
-
-Results stream in DISCOVERY ORDER while the search runs (so you see hits without
-waiting for the end); when the walk finishes they are re-sorted newest-first,
-matching the console tool's final output. The status bar shows a running file
-count and match total while searching, and the final count when done.
-
-COMMANDS
-------------------------------
-
-Type a command in the Find box starting with !, then Enter.
-
-  - !hotkey [combo] -- show or change the global hotkey (default Ctrl+Alt+F).
-    Modifiers Ctrl, Alt, Shift, Win; keys A-Z, 0-9, F1-F12, Space, Tab, Escape,
-    Enter. Remembered between runs.
-  - !quit -- stop the background searcher.
-  - !help -- open these docs in Notepad.
-
-LOAD IT
-------------------------------
-
-PowerShell 7 (pwsh) only. Copy pwsh-search-files.ps1 in full, then once per
-session:
-
-  Invoke-Expression (Get-Clipboard -Raw)
-
-That defines Search-Files; then Search-Files starts the detached background
-process. Press Ctrl+Alt+F to summon it. Or launch it from a Desktop shortcut
-(see create-shortcuts.ps1).
-
-NOTES
-------------------------------
-
-  - One instance. A second searcher can't claim the hotkey -- it shows a message
-    box and exits. Stop the running one first (!quit or Stop-Process).
-  - The search runs on a background thread so the window never freezes, even on
-    a slow / VPN-backed share; typing and scrolling stay responsive.
-'@
-    # HELP-TEXT-END
-
     # --- resolve an Explorer window handle to its folder path (COM Shell.Application) ---
     $resolveExplorerFolder = {
         param($hwnd)
@@ -557,11 +480,9 @@ NOTES
                 [System.Windows.Forms.Application]::Exit()
             }
             '!help' {
-                $helpPath = Join-Path $env:TEMP 'pwsh-search-files-help.txt'
-                $crlf = ($helpText -replace "`r`n", "`n") -replace "`n", "`r`n"
+                # Open the online README (rendered) in the default browser.
                 try {
-                    [System.IO.File]::WriteAllText($helpPath, $crlf, [System.Text.UTF8Encoding]::new($false))
-                    Start-Process notepad.exe -ArgumentList "`"$helpPath`""
+                    Start-Process 'https://github.com/robertvigil/pwsh-search-files#readme'
                 } catch {
                     & $tell "Couldn't open help:  $($_.Exception.Message)" 'Warning'
                 }
