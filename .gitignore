@@ -1,0 +1,3 @@
+# Claude Code local files -- not part of the shipped tool
+.claude/
+CLAUDE.md
