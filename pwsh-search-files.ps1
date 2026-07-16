@@ -482,7 +482,7 @@ public class SearchForm : Form {
             '!help' {
                 # Open the online README (rendered) in the default browser.
                 try {
-                    Start-Process 'https://github.com/robertvigil/pwsh-search-files#readme'
+                    Start-Process 'https://github.com/robertvigil/pwsh-search-files#cheatsheet'
                 } catch {
                     & $tell "Couldn't open help:  $($_.Exception.Message)" 'Warning'
                 }

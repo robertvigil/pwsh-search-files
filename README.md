@@ -14,6 +14,21 @@ PowerShell 7 script (no install), alongside `pwsh-switch-window` and
 
 ![screenshot](screenshots/screenshot.png)
 
+## Cheatsheet
+
+| Key | Action |
+|---|---|
+| **Ctrl+Alt+F** | Summon (fills **Root** with the current Explorer folder) |
+| Type in **Find**, **Enter** | Search Root — full-path, `*…*`, case-insensitive |
+| **Down** (from Find) | Jump into the results list |
+| **Up / Down** | Move through results |
+| **Enter** / double-click | Open the selected file |
+| **Ctrl+C** | Copy selected results (or all, if none selected) as `time<tab>path` |
+| **F5** | Re-run the last search |
+| **Esc** | Hide (stays loaded; re-summon with the hotkey) |
+
+**Commands** (type in Find, then Enter): `!hotkey [combo]` · `!quit` · `!help`
+
 ## The root folder
 
 This is the whole point of the GUI version. On summon it captures the
@@ -75,7 +90,7 @@ Type a command in the Find box starting with `!`, then Enter.
 |---|---|
 | `!hotkey [combo]` | Show or change the global hotkey (default `Ctrl+Alt+F`). Modifiers `Ctrl` `Alt` `Shift` `Win`; keys `A–Z` `0–9` `F1–F12` `Space` `Tab` `Escape` `Enter`. Remembered between runs. |
 | `!quit` | Stop the background searcher. |
-| `!help` | Open this README (on GitHub) in your browser. |
+| `!help` | Open the [Cheatsheet](#cheatsheet) (this README, on GitHub) in your browser. |
 
 ## Notes
 
