@@ -487,6 +487,53 @@ public class SearchForm : Form {
                     & $tell "Couldn't open help:  $($_.Exception.Message)" 'Warning'
                 }
             }
+            '!demo' {
+                # Maintainer helper (undocumented -- not in README/!help): fill the
+                # pane with fake hits for a clean screenshot, no real search. A real
+                # search or the next summon replaces it.
+                & $cleanupSearch
+                $script:hits = [System.Collections.Generic.List[object]]::new()
+                $list.Items.Clear()
+                $script:maxExtent = 0
+                $list.HorizontalExtent = 0
+                $rootBox.Text = 'S:\Projects'
+                $script:rootLeaf = 'Projects'
+                $script:currentWild = '*budget*'
+                $now = Get-Date
+                $demo = @(
+                    [pscustomobject]@{ T = $now.AddMinutes(-8);  P = 'S:\Projects\Acme\2026\Q4-Budget-final.xlsx' }
+                    [pscustomobject]@{ T = $now.AddMinutes(-52); P = 'S:\Projects\Acme\2026\Q4-Budget-draft.xlsx' }
+                    [pscustomobject]@{ T = $now.AddHours(-3);    P = 'S:\Projects\Acme\2026\Q4-Budget-notes.docx' }
+                    [pscustomobject]@{ T = $now.AddHours(-9);    P = 'S:\Projects\Acme\Reports\Weekly-Status-2026-07.docx' }
+                    [pscustomobject]@{ T = $now.AddHours(-27);   P = 'S:\Projects\Acme\Reports\Monthly-Summary-June.pdf' }
+                    [pscustomobject]@{ T = $now.AddDays(-2);     P = 'S:\Projects\Engineering\specs\api-design-v2.md' }
+                    [pscustomobject]@{ T = $now.AddDays(-3);     P = 'S:\Projects\Engineering\specs\data-model.md' }
+                    [pscustomobject]@{ T = $now.AddDays(-4);     P = 'S:\Projects\Engineering\src\Get-InventoryReport.ps1' }
+                    [pscustomobject]@{ T = $now.AddDays(-5);     P = 'S:\Projects\Engineering\src\Sync-Warehouse.ps1' }
+                    [pscustomobject]@{ T = $now.AddDays(-7);     P = 'S:\Projects\Engineering\tests\Get-InventoryReport.Tests.ps1' }
+                    [pscustomobject]@{ T = $now.AddDays(-9);     P = 'S:\Projects\Design\diagrams\architecture-overview.png' }
+                    [pscustomobject]@{ T = $now.AddDays(-12);    P = 'S:\Projects\Design\mockups\dashboard-v3.png' }
+                    [pscustomobject]@{ T = $now.AddDays(-15);    P = 'S:\Projects\Marketing\deck\Launch-Deck.pptx' }
+                    [pscustomobject]@{ T = $now.AddDays(-19);    P = 'S:\Projects\Acme\contracts\MSA-signed.pdf' }
+                    [pscustomobject]@{ T = $now.AddDays(-23);    P = 'S:\Projects\Acme\2025\Q4-Budget-2025.xlsx' }
+                    [pscustomobject]@{ T = $now.AddDays(-31);    P = 'S:\Projects\Engineering\build\release-notes.txt' }
+                    [pscustomobject]@{ T = $now.AddDays(-40);    P = 'S:\Projects\Archive\2025\kickoff-meeting-notes.txt' }
+                    [pscustomobject]@{ T = $now.AddDays(-58);    P = 'S:\Projects\Archive\2025\old-roadmap.xlsx' }
+                )
+                $demo = @($demo | Sort-Object { $_.T } -Descending)
+                $g = $list.CreateGraphics()
+                $list.BeginUpdate()
+                foreach ($h in $demo) {
+                    $script:hits.Add($h); [void]$list.Items.Add($h.P)
+                    $rowW = 3 + $g.MeasureString("$($h.T)  ", $list.Font).Width + $g.MeasureString($h.P, $list.Font).Width
+                    $rowW = [int][math]::Ceiling($rowW)
+                    if ($rowW -gt $script:maxExtent) { $script:maxExtent = $rowW }
+                }
+                $list.EndUpdate()
+                $g.Dispose()
+                $list.HorizontalExtent = $script:maxExtent + 12
+                $status.Text = "{0} file(s)  --  {1:N0} scanned   [{2}]" -f $script:hits.Count, 3847, $script:rootLeaf
+            }
             default {
                 & $tell "Unknown command  '$($parts[0])'  --  try  !help" 'Warning'
             }

@@ -12,6 +12,8 @@ copy-clean output — just in a window instead of the console. A single paste-in
 PowerShell 7 script (no install), alongside `pwsh-switch-window` and
 `pwsh-launch`.
 
+![screenshot](screenshots/screenshot.png)
+
 ## The root folder
 
 This is the whole point of the GUI version. On summon it captures the
