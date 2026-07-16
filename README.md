@@ -51,11 +51,10 @@ type or paste any path to search somewhere else.
 
 ## Load it
 
-PowerShell 7 (`pwsh`) only. Copy **`pwsh-search-files.ps1`** in full, then at the
-prompt — once per session:
+PowerShell 7 (`pwsh`) only. Load it straight from GitHub — once per session:
 
 ```powershell
-Invoke-Expression (Get-Clipboard -Raw)
+irm https://raw.githubusercontent.com/robertvigil/pwsh-search-files/main/pwsh-search-files.ps1 | iex
 ```
 
 That defines `Search-Files`; then:
@@ -65,8 +64,21 @@ Search-Files
 ```
 
 starts the detached background searcher and prints its PID. From then on,
-**Ctrl+Alt+F** summons it from anywhere. Or skip the paste-load and launch it
-from a Desktop shortcut (see `create-shortcuts.ps1` in the `pwsh-launch` folder).
+**Ctrl+Alt+F** summons it from anywhere. Or launch it from a Desktop shortcut
+(see `create-shortcuts.ps1` in the `pwsh-launch` folder).
+
+### Locked-down / offline machines
+
+If `.ps1` execution is blocked by policy, or the machine can't reach GitHub, copy
+**`pwsh-search-files.ps1`** in full and paste-load it instead — a pasted string
+isn't an executed script file, so it sidesteps the policy:
+
+```powershell
+iex (Get-Clipboard -Raw)
+```
+
+Then run `Search-Files` as above. (This is the original workflow these tools were
+built for; loading from GitHub is just the convenient path when it's available.)
 
 ## Use it
 
